@@ -1,0 +1,51 @@
+PS C:\WINDOWS\system32> kubectl cluster-info
+Kubernetes control plane is running at https://89.208.85.188:6443
+CoreDNS is running at https://89.208.85.188:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+PS C:\WINDOWS\system32> kubectl create namespace kubedoom
+Error from server (AlreadyExists): namespaces "kubedoom" already exists
+PS C:\WINDOWS\system32> kubectl apply -f C:\Users\User\Desktop\DevOps-gb\k8s\service-kubedoom.yaml -n kubedoom
+error: the path "C:\\Users\\User\\Desktop\\DevOps-gb\\k8s\\service-kubedoom.yaml" does not exist
+PS C:\WINDOWS\system32> kubectl apply -f C:\Users\User\Desktop\DevOps-gb\k8s\service-kubedoom.yaml -n kubedoom
+serviceaccount/kubedoom created
+clusterrolebinding.rbac.authorization.k8s.io/kubedoom created
+PS C:\WINDOWS\system32> kubectl apply -f C:\Users\User\Desktop\DevOps-gb\k8s\deployment-kubedoom.yaml -n kubedoom
+deployment.apps/kubedoom created
+PS C:\WINDOWS\system32> kubectl apply -f C:\Users\User\Desktop\DevOps-gb\k8s\pod-kubedoom.yaml -n kubedoom
+pod/kubedoom created
+PS C:\WINDOWS\system32> kubectl get po -n kubedoom
+NAME                        READY   STATUS    RESTARTS      AGE
+kubedoom                    0/1     Error     2 (20s ago)   28s
+kubedoom-5566ff589b-n6kd4   1/1     Running   0             48s
+PS C:\WINDOWS\system32> kubectl get po -n kubedoom
+NAME                        READY   STATUS    RESTARTS      AGE
+kubedoom                    1/1     Running   3 (28s ago)   52s
+kubedoom-5566ff589b-n6kd4   1/1     Running   0             72s
+PS C:\WINDOWS\system32> kubectl get clusterrolebindings kubedoom --all-namespaces -o json
+{
+    "apiVersion": "rbac.authorization.k8s.io/v1",
+    "kind": "ClusterRoleBinding",
+    "metadata": {
+        "annotations": {
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"ClusterRoleBinding\",\"metadata\":{\"annotations\":{},\"name\":\"kubedoom\"},\"roleRef\":{\"apiGroup\":\"rbac.authorization.k8s.io\",\"kind\":\"ClusterRole\",\"name\":\"cluster-admin\"},\"subjects\":[{\"kind\":\"ServiceAccount\",\"name\":\"kubedoom\",\"namespace\":\"kubedoom\"}]}\n"
+        },
+        "creationTimestamp": "2023-02-01T22:00:51Z",
+        "name": "kubedoom",
+        "resourceVersion": "72761",
+        "selfLink": "/apis/rbac.authorization.k8s.io/v1/clusterrolebindings/kubedoom",
+        "uid": "677e461c-51e4-4801-ac2d-1d1a2bf7766f"
+    },
+    "roleRef": {
+        "apiGroup": "rbac.authorization.k8s.io",
+        "kind": "ClusterRole",
+        "name": "cluster-admin"
+    },
+    "subjects": [
+        {
+            "kind": "ServiceAccount",
+            "name": "kubedoom",
+            "namespace": "kubedoom"
+        }
+    ]
+}
